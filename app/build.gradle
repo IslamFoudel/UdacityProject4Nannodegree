@@ -31,10 +31,10 @@ android {
         returnDefaultValues = true
     }
 
-    //dataBinding {
-    //    enabled = true
-    //    enabledForTests = true
-    //}
+    dataBinding {
+        enabled = true
+        enabledForTests = true
+    }
     buildFeatures {
         dataBinding true
     }
@@ -66,6 +66,10 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
+    // firebase implementation
+    implementation 'com.google.firebase:firebase-auth:20.0.2'
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.0'
+
 
     //Room dependencies
     implementation "androidx.room:room-ktx:$roomVersion"
