@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "499170305781",
+    "project_id": "udacitylocationremiderapp",
+    "storage_bucket": "udacitylocationremiderapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:499170305781:android:83de8fd94b3c3442ce07bc",
+        "android_client_info": {
+          "package_name": "com.udacity.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "499170305781-rk3430j97tfosfn2m5u5gegea987rrhe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.project4",
+            "certificate_hash": "e24946fbf0aeb10093bc2b36a794c9c435b5413e"
+          }
+        },
+        {
+          "client_id": "499170305781-u0kgpshu9gppsafklo069flc3oou2b3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsbhOKHOjTDds604lfTLZT9kq9h-Hgj-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "499170305781-u0kgpshu9gppsafklo069flc3oou2b3a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
