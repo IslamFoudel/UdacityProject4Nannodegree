@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -35,6 +37,7 @@ private const val REQUEST_PERMISSION_CODE = 3
 class SelectLocationFragment : BaseFragment() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var googleMap: GoogleMap
+
     // variable to catch sdk Q and earlier.
     //to ensure that app works on all the different versions including Android Q
     private val sdkQToAbove = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
@@ -45,6 +48,8 @@ class SelectLocationFragment : BaseFragment() {
         setMapStyle(googleMap)
         LocationPermission()
         zoomMap()
+        setPOI(googleMap)
+        addMapClick(googleMap)
 
     }
 
@@ -145,6 +150,7 @@ class SelectLocationFragment : BaseFragment() {
             }
         return foregroundLocationGranted && backgroundLocationGranted
     }
+
     fun zoomMap() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -175,6 +181,36 @@ class SelectLocationFragment : BaseFragment() {
                 )
             }
         }
+    }
+
+    private fun setPOI(googleMap: GoogleMap) {
+        googleMap.setOnPoiClickListener { poi ->
+            binding.btnSave.setOnClickListener {
+                onLocationSelected(poi)
+            }
+            val poiMarker = googleMap.addMarker(
+                MarkerOptions().position(poi.latLng).title(poi.name)
+            )
+            poiMarker.showInfoWindow()
+        }
+
+    }
+
+    private fun addMapClick(map: GoogleMap) {
+        map.setOnMapClickListener {
+            binding.btnSave.setOnClickListener { view ->
+                _viewModel.latitude.value = it.latitude
+                _viewModel.longitude.value = it.longitude
+                _viewModel.reminderSelectedLocationStr.value = "Location detected"
+                findNavController().popBackStack()
+            }
+
+            val cameraMove = CameraUpdateFactory.newLatLngZoom(it, 15f)
+            map.moveCamera(cameraMove)
+            val poiMarker = map.addMarker(MarkerOptions().position(it))
+            poiMarker.showInfoWindow()
+        }
+
     }
 
     //Use Koin to get the view model of the SaveReminder
