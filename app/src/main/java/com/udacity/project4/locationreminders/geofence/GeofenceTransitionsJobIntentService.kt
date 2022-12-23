@@ -2,8 +2,10 @@ package com.udacity.project4.locationreminders.geofence
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.JobIntentService
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingEvent
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
@@ -19,11 +21,11 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     private var coroutineJob: Job = Job()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + coroutineJob
+    private val remindersLocalRepository: ReminderDataSource by inject()
+
 
     companion object {
         private const val JOB_ID = 573
-
-        //        TODO: call this to start the JobIntentService to handle the geofencing transition events
         fun enqueueWork(context: Context, intent: Intent) {
             enqueueWork(
                 context,
@@ -34,14 +36,27 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     }
 
     override fun onHandleWork(intent: Intent) {
-        //TODO: handle the geofencing transition events and
-        // send a notification to the user when he enters the geofence area
-        //TODO call @sendNotification
+        val geofencingEvent = GeofencingEvent.fromIntent(intent)
+        // it is check if the user get enter to Geofence or Dwell, one of the 2 types of Geofence
+        //so send him a notification to remind him with what he want to do in this area.
+        if (geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+            geofencingEvent.geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL
+        ) {
+            sendNotification(geofencingEvent.triggeringGeofences)
+        }
     }
 
-    //TODO: get the request id of the current geofence
     private fun sendNotification(triggeringGeofences: List<Geofence>) {
-        val requestId = ""
+        val requestId = when {
+            triggeringGeofences.isNotEmpty() -> {
+                // handle if its triggered Geofence with requestid.
+                triggeringGeofences[0].requestId
+            }
+            else -> {
+                //if there is nno triggered Geofence, just return
+                return
+            }
+        }
 
         //Get the local repository instance
         val remindersLocalRepository: ReminderDataSource by inject()

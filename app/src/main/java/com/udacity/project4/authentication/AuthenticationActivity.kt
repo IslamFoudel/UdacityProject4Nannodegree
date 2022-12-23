@@ -79,7 +79,7 @@ class AuthenticationActivity : AppCompatActivity() {
                 // if the user is Successfully login.
                 val intent = Intent(this, RemindersActivity::class.java)
                 startActivity(intent)
-                // i not successfully loged just return.
+                // i not successfully logged just return.
             } else if (response == null) {
                 return
             }
