@@ -10,7 +10,7 @@ class AuthenticationViewModel : ViewModel() {
         LOGGED, NOLOGGED
     }
 
-    val authenticationMode = FirebaseUserLiveData().map { user ->
+    val loginStatus = FirebaseUserLiveData().map { user ->
         if (user != null) {
             LoginMode.LOGGED
         } else {
