@@ -55,6 +55,7 @@ class RemindersLocalRepositoryTest {
         reminderDataBase.close()
     }
 
+    // changed to same variable for new test
     @Test
     fun saveAndGetReminderByID() = mainCoroutineRule.runBlockingTest {
         val reminderDTO = ReminderDTO(
