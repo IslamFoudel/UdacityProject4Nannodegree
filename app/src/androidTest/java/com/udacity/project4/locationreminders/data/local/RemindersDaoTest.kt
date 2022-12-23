@@ -63,11 +63,11 @@ class RemindersDaoTest {
     @Test
     fun checkForReminnderFound() = runBlockingTest {
         val reminder = ReminderDTO(
-            title = "Kotlin",
-            description = "Study good, stay tuned",
-            location = "Home Located",
-            latitude = 95.4785,
-            longitude = 2563.3214
+            title = "Football",
+            description = "Play it, with full of motivation",
+            location = "BarCelona",
+            latitude = 79.6214,
+            longitude = 6514.3657
         )
 
         databaseReminder.reminderDao().saveReminder(reminder)
