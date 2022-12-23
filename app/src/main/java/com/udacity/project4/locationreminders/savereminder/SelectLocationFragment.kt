@@ -21,6 +21,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -111,13 +112,17 @@ class SelectLocationFragment : BaseFragment() {
         }
         locationSettingsResponseTask.addOnCompleteListener {
             if (it.isSuccessful) {
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                if (context?.let { it1 ->
+                        ActivityCompat.checkSelfPermission(
+                            it1,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        )
+                    } != PackageManager.PERMISSION_GRANTED && context?.let { it1 ->
+                        ActivityCompat.checkSelfPermission(
+                            it1,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        )
+                    } != PackageManager.PERMISSION_GRANTED
                 ) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
@@ -126,7 +131,7 @@ class SelectLocationFragment : BaseFragment() {
                     //                                          int[] grantResults)
                     // to handle the case where the user grants the permission. See the documentation
                     // for ActivityCompat#requestPermissions for more details.
-                    return
+                    return@addOnCompleteListener
                 }
                 googleMap.isMyLocationEnabled = true
             }
@@ -152,13 +157,17 @@ class SelectLocationFragment : BaseFragment() {
     }
 
     fun zoomMap() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+        if (context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            } != PackageManager.PERMISSION_GRANTED && context?.let {
+                ActivityCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            } != PackageManager.PERMISSION_GRANTED
         ) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -240,15 +249,20 @@ class SelectLocationFragment : BaseFragment() {
 
 
 //        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
+        //onLocationSelected()
 
         return binding.root
     }
 
-    private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
+    // let the user confirms on the selected location,
+    // and then we back with selected locatin details for view model,
+    // and then we navigate back to the fragment to save the reminder details and add the geofence
+    private fun onLocationSelected(poi: PointOfInterest) {
+        val latLng = poi.latLng
+        _viewModel.reminderSelectedLocationStr.value = poi.name
+        _viewModel.latitude.value = latLng.latitude
+        _viewModel.longitude.value = latLng.longitude
+        findNavController().popBackStack()
     }
 
 
