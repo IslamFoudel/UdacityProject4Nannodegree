@@ -32,6 +32,9 @@ class FakeDataSource(var remindersDTO: MutableList<ReminderDTO>? = mutableListOf
     override suspend fun deleteAllReminders() {
         remindersDTO?.clear()
     }
+    fun setReturnError(value: Boolean) {
+        error = value
+    }
 
 
 }
